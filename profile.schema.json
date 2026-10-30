@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Personal AI-Native Page - Profile Data",
+  "description": "Schema for verified self-reported personal records. Only fields listed in limits.published_fields may be displayed to a visitor.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "about",
+    "courses",
+    "projects",
+    "skills",
+    "limits"
+  ],
+  "properties": {
+    "about": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "display_name",
+        "headline"
+      ],
+      "properties": {
+        "display_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "headline": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "courses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "topics"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "topics": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "projects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "summary",
+          "stack",
+          "skills",
+          "goal",
+          "features",
+          "architecture",
+          "runtime",
+          "result"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          },
+          "stack": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "goal": {
+            "type": "string",
+            "minLength": 1
+          },
+          "features": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "architecture": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "frontend",
+              "backend",
+              "storage",
+              "deployment"
+            ],
+            "properties": {
+              "frontend": {
+                "type": "string",
+                "minLength": 1
+              },
+              "backend": {
+                "type": "string",
+                "minLength": 1
+              },
+              "storage": {
+                "type": "string",
+                "minLength": 1
+              },
+              "deployment": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "runtime": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "local_url",
+              "internet_required",
+              "registration_required",
+              "database_required"
+            ],
+            "properties": {
+              "local_url": {
+                "type": "string",
+                "minLength": 1
+              },
+              "internet_required": {
+                "type": "boolean"
+              },
+              "registration_required": {
+                "type": "boolean"
+              },
+              "database_required": {
+                "type": "boolean"
+              }
+            }
+          },
+          "result": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "published_fields",
+        "private_topics",
+        "allowed_actions",
+        "forbidden_actions"
+      ],
+      "properties": {
+        "published_fields": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "private_topics": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "allowed_actions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "forbidden_actions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

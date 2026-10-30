@@ -1,0 +1,125 @@
+{
+  "about": {
+    "display_name": null,
+    "headline": null
+  },
+  "courses": [
+    {
+      "id": "ai_native_systems_design",
+      "title": "AI-Native Systems Design",
+      "topics": []
+    },
+    {
+      "id": "internet_of_things",
+      "title": "اینترنت اشیا (Internet of Things)",
+      "topics": []
+    },
+    {
+      "id": "macroeconomics",
+      "title": "اقتصاد کلان (ماکرو)",
+      "topics": []
+    },
+    {
+      "id": "world_economic_history",
+      "title": "تاریخ اقتصادی جهان",
+      "topics": []
+    }
+  ],
+  "projects": [
+    {
+      "id": "haftehchin",
+      "title": "هفته‌چین (HaftehChin)",
+      "summary": "وب‌اپلیکیشن فارسی برنامه‌ریزی هفتگی و مدیریت زمان با جدول ۲۴ ساعته از شنبه تا جمعه؛ دارای فعالیت‌های قابل شخصی‌سازی، جابه‌جایی با Drag & Drop، ذخیره‌سازی خودکار و پشتیبان‌گیری JSON. برنامه به‌صورت محلی و بدون نیاز به اینترنت یا دیتابیس اجرا می‌شود.",
+      "goal": "ساده‌تر کردن برنامه‌ریزی روزانه و ایجاد نظم در فعالیت‌های آموزشی، عبادی و شخصی.",
+      "features": [
+        "نمایش برنامه هفتگی شمسی از شنبه تا جمعه در جدول ۲۴ ساعته، با تنظیم زمان به ساعت و دقیقه",
+        "باکس‌های آماده برای نماز، درس، مطالعه، خواب، ورزش، مداحی و جلسات با مدت‌زمان و رنگ مشخص",
+        "تغییر نام، رنگ، مدت‌زمان و سایر مشخصات فعالیت‌ها و ساخت باکس جدید",
+        "افزودن و جابه‌جایی فعالیت‌ها با کلیک یا Drag & Drop",
+        "ذخیره‌سازی خودکار بدون نیاز به ثبت‌نام یا اتصال اینترنت",
+        "رابط کاربری واکنش‌گرا برای کامپیوتر و موبایل، به زبان فارسی و راست‌به‌چپ",
+        "تهیه نسخه پشتیبان و بازیابی داده‌ها با فایل JSON"
+      ],
+      "stack": [
+        "HTML5",
+        "CSS3",
+        "JavaScript (Vanilla JS)",
+        "Python 3",
+        "JSON",
+        "HTTP Server"
+      ],
+      "skills": [
+        "توسعه رابط وب با HTML و CSS",
+        "برنامه‌نویسی تعاملی با JavaScript خالص",
+        "پیاده‌سازی سرور محلی با Python",
+        "طراحی واکنش‌گرا و راست‌به‌چپ",
+        "کار با فایل JSON",
+        "پیاده‌سازی Drag & Drop"
+      ],
+      "architecture": {
+        "frontend": "HTML5، CSS3 و JavaScript خالص بدون فریم‌ورک‌هایی مانند React",
+        "backend": "سرور محلی با Python 3",
+        "storage": "فایل JSON، بدون پایگاه داده یا سرویس ابری",
+        "deployment": "اجرای محلی از طریق HTTP Server روی پورت ۶۲۳۶"
+      },
+      "runtime": {
+        "local_url": "http://localhost:6236",
+        "internet_required": false,
+        "registration_required": false,
+        "database_required": false
+      },
+      "result": "یک برنامه‌ریز هفتگی تحت وب، سبک و شخصی‌سازی‌پذیر، با رابط فارسی و راست‌به‌چپ که بدون اینترنت، پایگاه داده و نصب کتابخانه‌های اضافی قابل استفاده است."
+    }
+  ],
+  "skills": [
+    "HTML5",
+    "CSS3",
+    "JavaScript (Vanilla JS)",
+    "Python 3",
+    "JSON",
+    "طراحی واکنش‌گرا",
+    "طراحی رابط کاربری راست‌به‌چپ"
+  ],
+  "limits": {
+    "published_fields": [
+      "about.display_name",
+      "about.headline",
+      "courses[].title",
+      "courses[].topics",
+      "projects[].title",
+      "projects[].summary",
+      "projects[].stack",
+      "projects[].skills",
+      "skills[]",
+      "limits",
+      "projects[].goal",
+      "projects[].features",
+      "projects[].architecture.frontend",
+      "projects[].architecture.backend",
+      "projects[].architecture.storage",
+      "projects[].architecture.deployment",
+      "projects[].runtime.local_url",
+      "projects[].runtime.internet_required",
+      "projects[].runtime.registration_required",
+      "projects[].runtime.database_required",
+      "projects[].result"
+    ],
+    "private_topics": [
+      "personal_phone",
+      "home_address",
+      "unpublished_grades"
+    ],
+    "allowed_actions": [
+      "answer_from_record",
+      "answer_from_external_api",
+      "ask_clarifying_question",
+      "refuse_unpublished_fact",
+      "report_out_of_scope"
+    ],
+    "forbidden_actions": [
+      "send_email",
+      "book_meeting",
+      "represent_sharif_university"
+    ]
+  }
+}

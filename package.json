@@ -1,0 +1,12 @@
+{
+  "name": "personal-ai-native-page",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "node --test tests/*.test.js",
+    "check:live": "node scripts/check-live.mjs"
+  },
+  "engines": {"node": ">=20"}
+}
