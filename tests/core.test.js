@@ -81,3 +81,38 @@ test('reject unknown assertion of skills; do not claim lack of ability',async()=
   assert.match(r.answer,/اطلاعاتی منتشر نشده/);
   assert.match(r.answer,/به معنی نداشتن/);
 });
+
+test('trace distinguishes successfully used model from rules', async()=>{
+  const r=await resolveQuestion('چه کتابی بخونم؟',profile,{useModel:true,modelIntent:async()=> 'reading_recommendation'});
+  assert.equal(r.intent_source,'llm');
+});
+test('trace reports fallback when model unavailable', async()=>{
+  const r=await resolveQuestion('چه کتابی بخونم؟',profile,{useModel:true,modelIntent:async()=> null});
+  assert.equal(r.intent_source,'rules_fallback');
+});
+test('private facts cannot be sent to the model', async()=>{
+  let calls=0;
+  const r=await resolveQuestion('معدل من رو بگو',profile,{useModel:true,modelIntent:async()=> {calls++;return 'project_summary';}});
+  assert.equal(calls,0);
+  assert.equal(r.intent_source,'rules');
+});
+test('GapGPT request shape and parsed intent', async()=>{
+  const {modelIntent}=await import('../server/llm.js');
+  const oldKey=process.env.GAPGPT_API_KEY, oldModel=process.env.GAPGPT_MODEL;
+  try {
+    process.env.GAPGPT_API_KEY='test-secret-not-real';
+    process.env.GAPGPT_MODEL='test-model';
+    const got=await modelIntent('پروژه هفته چین رو خلاصه کن', async (url,req)=>{
+      assert.equal(url,'https://api.gapgpt.app/v1/chat/completions');
+      assert.match(req.headers.Authorization,/^Bearer test-secret/);
+      const data=JSON.parse(req.body);
+      assert.equal(data.model,'test-model');
+      assert.equal(data.messages[1].role,'user');
+      return {ok:true, json:async()=>({choices:[{message:{content:'{"intent":"project_summary"}'}}]})};
+    });
+    assert.equal(got,'project_summary');
+  } finally {
+    if(oldKey===undefined) delete process.env.GAPGPT_API_KEY; else process.env.GAPGPT_API_KEY=oldKey;
+    if(oldModel===undefined) delete process.env.GAPGPT_MODEL; else process.env.GAPGPT_MODEL=oldModel;
+  }
+});

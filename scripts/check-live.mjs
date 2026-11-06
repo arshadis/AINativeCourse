@@ -30,7 +30,7 @@ for (const c of cases) {
   const allowed=Array.isArray(c.expected)?c.expected:[c.expected];
   if(!allowed.includes(data.capability)) throw new Error(`${c.name} got unexpected capability: ${data.capability}`);
   if(typeof data.answer!=='string' || !Array.isArray(data.fields_read)) throw new Error(`${c.name} invalid response`);
-  traces.push({case:c.name,question:c.question,intent:data.intent,fields_read:data.fields_read,
+  traces.push({case:c.name,question:c.question,intent:data.intent,intent_source:data.intent_source||'unknown',fields_read:data.fields_read,
     external_service:data.external_service||null, external_fields:data.external_fields||[],
     external_status:data.external_status||null,capability:data.capability,answer:data.answer});
 }
@@ -38,7 +38,7 @@ await mkdir(output,{recursive:true});
 await writeFile(resolve(output,'traces.json'),JSON.stringify({tested_url:base.origin,generated_at:new Date().toISOString(),traces},null,2)+'\n');
 const markdown=[`# AI-Native Assignment 1 — Live Traces`, '', `Deployed URL: ${base.origin}`, '',
   ...traces.flatMap(t=>[
-    `## ${t.case}`,`- Question: ${t.question}`,`- Intent: \`${t.intent}\``,
+    `## ${t.case}`,`- Question: ${t.question}`,`- Intent: \`${t.intent}\``, `- Intent source: \`${t.intent_source}\``,
     `- Fields read: ${t.fields_read.length?t.fields_read.map(v=>'`'+v+'`').join('، '):'هیچ‌کدام'}`,
     `- Capability: \`${t.capability}\``,
     ...(t.external_service?[`- External service: ${t.external_service}`,`- External fields: ${(t.external_fields||[]).join(', ') || '—'}`]:[]),
