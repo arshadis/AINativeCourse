@@ -5,7 +5,7 @@ Deployed URL: https://sobhan.darkube.ir
 ## good_answer
 - Question: پروژه هفته‌چین را خلاصه کن
 - Intent: `project_summary`
-- Intent source: `rules`
+- Intent source: `gapgpt`
 - Fields read: `projects[haftehchin].title`، `projects[haftehchin].summary`، `projects[haftehchin].stack`
 - Capability: `answer_from_record`
 - Answer:
@@ -30,20 +30,20 @@ HTML5، CSS3، JavaScript (Vanilla JS)، Python 3، JSON، HTTP Server
 
 ## clarification
 - Question: چه کتابی بخونم؟
-- Intent: `reading_recommendation`
-- Intent source: `rules`
-- Fields read: `courses[ai_native_systems_design].title`، `courses[internet_of_things].title`، `courses[macroeconomics].title`، `courses[world_economic_history].title`، `projects[haftehchin].title`
+- Intent: `unclear`
+- Intent source: `gapgpt`
+- Fields read: هیچ‌کدام
 - Capability: `ask_clarifying_question`
 - Answer:
 
-برای کدام درس یا پروژه منابع مطالعه می‌خواهید؟ AI-Native Systems Design، اینترنت اشیا (Internet of Things)، اقتصاد کلان (ماکرو)، تاریخ اقتصادی جهان، هفته‌چین (HaftehChin)
+برای کدام درس یا پروژه می‌خواهید پیشنهاد مطالعه بگیرید؟
 
 ---
 
 ## external_api
 - Question: برای درس اینترنت اشیا کتاب پیشنهاد بده
 - Intent: `reading_recommendation`
-- Intent source: `rules`
+- Intent source: `gapgpt`
 - Fields read: `courses[internet_of_things].title`
 - Capability: `answer_from_external_api`
 - External service: Open Library

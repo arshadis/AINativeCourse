@@ -1,12 +1,12 @@
 {
   "tested_url": "https://sobhan.darkube.ir",
-  "generated_at": "2026-11-07T13:49:03.575Z",
+  "generated_at": "2026-11-07T18:06:24.077Z",
   "traces": [
     {
       "case": "good_answer",
       "question": "پروژه هفته‌چین را خلاصه کن",
       "intent": "project_summary",
-      "intent_source": "rules",
+      "intent_source": "gapgpt",
       "fields_read": [
         "projects[haftehchin].title",
         "projects[haftehchin].summary",
@@ -33,26 +33,20 @@
     {
       "case": "clarification",
       "question": "چه کتابی بخونم؟",
-      "intent": "reading_recommendation",
-      "intent_source": "rules",
-      "fields_read": [
-        "courses[ai_native_systems_design].title",
-        "courses[internet_of_things].title",
-        "courses[macroeconomics].title",
-        "courses[world_economic_history].title",
-        "projects[haftehchin].title"
-      ],
+      "intent": "unclear",
+      "intent_source": "gapgpt",
+      "fields_read": [],
       "external_service": null,
       "external_fields": [],
       "external_status": null,
       "capability": "ask_clarifying_question",
-      "answer": "برای کدام درس یا پروژه منابع مطالعه می‌خواهید؟ AI-Native Systems Design، اینترنت اشیا (Internet of Things)، اقتصاد کلان (ماکرو)، تاریخ اقتصادی جهان، هفته‌چین (HaftehChin)"
+      "answer": "برای کدام درس یا پروژه می‌خواهید پیشنهاد مطالعه بگیرید؟"
     },
     {
       "case": "external_api",
       "question": "برای درس اینترنت اشیا کتاب پیشنهاد بده",
       "intent": "reading_recommendation",
-      "intent_source": "rules",
+      "intent_source": "gapgpt",
       "fields_read": [
         "courses[internet_of_things].title"
       ],
