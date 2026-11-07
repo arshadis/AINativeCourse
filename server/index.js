@@ -22,7 +22,12 @@ const server=http.createServer(async(req,res)=>{
         res.writeHead(400,{'Content-Type':'application/json; charset=utf-8'});
         return res.end(JSON.stringify({error:'Question required'}));
       }
-      const result=await resolveQuestion(data.question,profile,{useModel:!!((process.env.GAPGPT_API_KEY && process.env.GAPGPT_MODEL) || (process.env.OPENAI_API_KEY && process.env.OPENAI_MODEL))});
+      const started=performance.now();
+      const result=await resolveQuestion(data.question,profile,{
+        state:data.state,
+        useModel:!!(process.env.GAPGPT_API_KEY && process.env.GAPGPT_MODEL),
+      });
+      result.total_latency_ms=Math.round(performance.now()-started);
       res.writeHead(200,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});
       return res.end(JSON.stringify(result));
     }

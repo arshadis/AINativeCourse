@@ -5,6 +5,7 @@ const queries = {
   internet_of_things: 'internet of things',
   macroeconomics: 'macroeconomics',
   world_economic_history: 'economic history world',
+  haftehchin: 'javascript web applications',
 };
 export async function searchBooks(courseId, fetcher = fetch) {
   const q = queries[courseId];
