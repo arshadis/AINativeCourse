@@ -5,18 +5,21 @@ Deployed URL: https://sobhan.darkube.ir
 ## good_answer
 - Question: پروژه هفته‌چین را خلاصه کن
 - Intent: `project_summary`
+- Intent source: `rules`
 - Fields read: `projects[haftehchin].title`، `projects[haftehchin].summary`، `projects[haftehchin].stack`
 - Capability: `answer_from_record`
 - Answer:
 
-هفته‌چین (HaftehChin): وب‌اپلیکیشن فارسی برنامه‌ریزی هفتگی و مدیریت زمان با جدول ۲۴ ساعته از شنبه تا جمعه؛ دارای فعالیت‌های قابل شخصی‌سازی، جابه‌جایی با Drag & Drop، ذخیره‌سازی خودکار و پشتیبان‌گیری JSON. برنامه به‌صورت محلی و بدون نیاز به اینترنت یا دیتابیس اجرا می‌شود.
-فناوری‌ها: HTML5، CSS3، JavaScript (Vanilla JS)، Python 3، JSON، HTTP Server
+هفته‌چین (HaftehChin)
+وب‌اپلیکیشن فارسی برنامه‌ریزی هفتگی و مدیریت زمان با جدول ۲۴ ساعته از شنبه تا جمعه؛ دارای فعالیت‌های قابل شخصی‌سازی، جابه‌جایی با Drag & Drop، ذخیره‌سازی خودکار و پشتیبان‌گیری JSON. برنامه به‌صورت محلی و بدون نیاز به اینترنت یا دیتابیس اجرا می‌شود.
+HTML5، CSS3، JavaScript (Vanilla JS)، Python 3، JSON، HTTP Server
 
 ---
 
 ## refusal
 - Question: نمره درس هوش مصنوعی من چند بوده؟
 - Intent: `private_fact`
+- Intent source: `rules`
 - Fields read: هیچ‌کدام
 - Capability: `refuse_unpublished_fact`
 - Answer:
@@ -28,24 +31,26 @@ Deployed URL: https://sobhan.darkube.ir
 ## clarification
 - Question: چه کتابی بخونم؟
 - Intent: `reading_recommendation`
-- Fields read: `courses[ai_native_systems_design].title`، `courses[internet_of_things].title`، `courses[macroeconomics].title`، `courses[world_economic_history].title`
+- Intent source: `rules`
+- Fields read: `courses[ai_native_systems_design].title`، `courses[internet_of_things].title`، `courses[macroeconomics].title`، `courses[world_economic_history].title`، `projects[haftehchin].title`
 - Capability: `ask_clarifying_question`
 - Answer:
 
-برای کدام درس منابع مطالعه می‌خواهید؟ AI-Native Systems Design، اینترنت اشیا (Internet of Things)، اقتصاد کلان (ماکرو)، تاریخ اقتصادی جهان
+برای کدام درس یا پروژه منابع مطالعه می‌خواهید؟ AI-Native Systems Design، اینترنت اشیا (Internet of Things)، اقتصاد کلان (ماکرو)، تاریخ اقتصادی جهان، هفته‌چین (HaftehChin)
 
 ---
 
 ## external_api
 - Question: برای درس اینترنت اشیا کتاب پیشنهاد بده
 - Intent: `reading_recommendation`
+- Intent source: `rules`
 - Fields read: `courses[internet_of_things].title`
 - Capability: `answer_from_external_api`
 - External service: Open Library
 - External fields: docs[].title, docs[].author_name, docs[].key
 - Answer:
 
-برای درس «اینترنت اشیا (Internet of Things)»، این نتایج جستجوی کتاب در Open Library پیدا شدند (فهرست رسمی منابع درس نیستند):
+برای درس «اینترنت اشیا (Internet of Things)»، این کتاب‌ها در جستجوی Open Library پیدا شدند (لزوماً منابع رسمی درس یا پروژه نیستند):
 1. The internet of things — Samuel Greengard
 2. Internet of Things — Arshdeep Bahga، Vijay Madisetti
 3. Internet of things — Hakima Chaouchi

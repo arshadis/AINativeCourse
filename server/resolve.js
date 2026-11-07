@@ -8,6 +8,20 @@ const unknown = 'این اطلاعات در رکورد عمومی منتشر ن�
 const listField = (collection,id,field)=>`${collection}[${id}].${field}`;
 const projectFields = id=>[listField('projects',id,'title'),listField('projects',id,'summary'),listField('projects',id,'stack')];
 
+// Only trust a model-extracted course mention if the visitor actually wrote it.
+// Persian/Arabic/Latin digits and optional spaces before digits should be equivalent
+// for literal-quote verification, not for inventing course records.
+function normalizedCourseQuote(value) {
+  return normalize(value).replace(/[۰-۹٠-٩]/g,d=>{
+    const n=d.charCodeAt(0);
+    return String(n >= 0x06F0 ? n-0x06F0 : n-0x0660);
+  }).replace(/([\p{L}])\s+(?=\d)/gu,'$1');
+}
+function quotedCourseInQuestion(question, mention) {
+  return typeof mention==='string' && mention.trim().length >= 2 &&
+    normalizedCourseQuote(question).includes(normalizedCourseQuote(mention));
+}
+
 // Use the visitor's actual words as job criteria, never model-only claims.
 // The model identifies semantic requirements; this narrow lexical safety net
 // captures explicitly typed Latin tech labels in a Persian job question when
@@ -116,6 +130,13 @@ export async function resolveQuestion(question,profile,deps={}) {
       findCourse(q,profile.courses).length===1) {
     route=normalizeRoute({intent:INTENTS.READING,subject:'courses'},profile);
   }
+  // Preserve a specifically named course from a pending reading clarification,
+  // even if the model marked its own interpretation as 'unclear'.
+  if (route.intent===INTENTS.UNCLEAR && state?.pending_intent===INTENTS.READING &&
+      route.subject==='courses' && quotedCourseInQuestion(q,route.entity_mention)) {
+    route=normalizeRoute({intent:INTENTS.READING,subject:'courses',
+      entity_mention:route.entity_mention, needs_clarification:false},profile);
+  }
   // Even if the model used job_fit, explicit general-audience classification
   // cannot be treated as personal suitability evidence.
   if (route.intent===INTENTS.JOB && route.job_target==='general') {
@@ -132,7 +153,16 @@ export async function resolveQuestion(question,profile,deps={}) {
   // criteria supplied by the visitor (nor assume a role implies all criteria).
   const hasJobCriteria=intent===INTENTS.JOB && (
     askedJobRequirements.length>0 || matchJobSkills(q,profile.skills).length>0);
-  if (intent===INTENTS.UNCLEAR || (route.needs_clarification && !hasJobCriteria)) {
+  // The model can request clarification even when the visitor already supplied
+  // a concrete (possibly unrecorded) course name. Do not ask the same question
+  // again: let the reading handler verify that name against public profile data.
+  const explicitlyNamedReadingEntity=intent===INTENTS.READING && (
+    quotedCourseInQuestion(q,route.entity_mention) && route.subject==='courses' ||
+    findCourse(q,profile.courses).length===1 ||
+    profile.projects.some(p=>normalize(q).includes(normalize(p.title)) ||
+      normalize(q).includes(normalize(p.id))));
+  if (intent===INTENTS.UNCLEAR ||
+      (route.needs_clarification && !hasJobCriteria && !explicitlyNamedReadingEntity)) {
     if (intent===INTENTS.READING) return clarify(intent,'برای کدام درس ثبت‌شده کتاب یا منبع مطالعه می‌خواهید؟',[],INTENTS.READING);
     if (intent===INTENTS.JOB) return clarify(intent,'لطفاً مهارت‌های موردنیاز یا شرح موقعیت شغلی را مشخص کنید.',[],INTENTS.JOB);
     if (intent===INTENTS.PROJECT || intent===INTENTS.PROJECT_DETAILS) return clarify(intent,'درباره کدام پروژه ثبت‌شده و کدام بخش آن سؤال دارید؟',[],INTENTS.PROJECT);
@@ -206,6 +236,16 @@ export async function resolveQuestion(question,profile,deps={}) {
       const names=[...visibleCourses.map(c=>c.title),...visibleProjects.map(p=>p.title)];
       const fields=[...visibleCourses.map(c=>listField('courses',c.id,'title')),
         ...visibleProjects.map(p=>listField('projects',p.id,'title'))];
+      const mentioned=typeof route.entity_mention==='string' ? route.entity_mention.trim() : '';
+      // Only echo an explicit user-written name. It cannot become an invented
+      // catalog entry, and only PUBLIC course names are offered as alternatives.
+      const quoted=quotedCourseInQuestion(q,mentioned) &&
+        !visibleCourses.some(c=>normalizedCourseQuote(c.title)===normalizedCourseQuote(mentioned));
+      if (quoted && route.subject==='courses') return clarify(intent,
+        `درس «${mentioned}» در فهرست عمومی درس‌های ثبت‌شده نیست. `+
+        `می‌توانم براساس درس‌های ثبت‌شده یا پروژه موجود پیشنهاد کتاب بدهم. `+
+        `منظورتان کدام‌یک از این درس‌هاست؟ ${visibleCourses.map(c=>c.title).join('، ')}`,
+        visibleCourses.map(c=>listField('courses',c.id,'title')),INTENTS.READING);
       return clarify(intent,`برای کدام درس یا پروژه منابع مطالعه می‌خواهید؟ ${names.join('، ')}`,
         fields,INTENTS.READING);
     }

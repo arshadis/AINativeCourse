@@ -349,3 +349,106 @@ test('generic occupation question remains out of scope',async()=>{
   }));
   assert.equal(r.capability,'report_out_of_scope');
 });
+
+// The conversation must not forget an explicitly named course just because it
+// is absent from the public course catalog.
+test('reading follow-up names unlisted mathematics course instead of repeating a generic question',async()=>{
+  const first=await resolveQuestion('چه کتابی بخونم؟',profile,routed(INTENTS.READING,{needs_clarification:true}));
+  assert.equal(first.next_state.pending_intent,INTENTS.READING);
+  let apiCalls=0;
+  const second=await resolveQuestion('برای ریاضی۲',profile,{
+    ...routed(INTENTS.READING,{subject:'courses',entity_id:null,entity_mention:'ریاضی۲'}),
+    state:first.next_state,searchBooks:async()=>{apiCalls++;return [];},
+  });
+  assert.equal(apiCalls,0);
+  assert.equal(second.capability,'ask_clarifying_question');
+  assert.equal(second.intent,'reading_recommendation');
+  assert.match(second.answer,/ریاضی۲/);
+  assert.match(second.answer,/فهرست عمومی.*نیست/);
+  assert.match(second.answer,/اینترنت اشیا/);
+  assert.equal(second.next_state.pending_intent,INTENTS.READING);
+  assert.ok(second.fields_read.includes('courses[internet_of_things].title'));
+});
+
+test('unknown course from model must be a verbatim phrase in user question',async()=>{
+  const result=await resolveQuestion('برای چه درسی؟',profile,routed(INTENTS.READING,{
+    subject:'courses',entity_id:null,entity_mention:'ریاضی۲'
+  }));
+  assert.equal(result.capability,'ask_clarifying_question');
+  assert.doesNotMatch(result.answer,/ریاضی۲/);
+});
+
+test('unclear model classification still respects a named reading follow-up',async()=>{
+  const result=await resolveQuestion('برای ریاضی2',profile,{
+    ...routed(INTENTS.UNCLEAR,{subject:'courses',entity_mention:'ریاضی2',needs_clarification:true}),
+    state:{pending_intent:INTENTS.READING},
+  });
+  assert.equal(result.intent,INTENTS.READING);
+  assert.match(result.answer,/ریاضی2/);
+});
+
+test('real GapGPT JSON parser retains verbatim unlisted entity mention',async()=>{
+  const oldKey=process.env.GAPGPT_API_KEY,oldModel=process.env.GAPGPT_MODEL;
+  try {
+    process.env.GAPGPT_API_KEY='test-not-real';process.env.GAPGPT_MODEL='test-model';
+    const result=await modelRoute('برای ریاضی۲',profile,{pending_intent:INTENTS.READING},
+      async(url,request)=>{
+        const body=JSON.parse(request.body);
+        assert.match(body.messages[0].content,/entity_mention/);
+        assert.match(body.messages[0].content,/برای ریاضی۲/);
+        return {ok:true,json:async()=>({choices:[{message:{content:JSON.stringify({
+          intent:INTENTS.READING,subject:'courses',entity_id:null,
+          entity_mention:'ریاضی۲',needs_clarification:false
+        })}}]})};
+      });
+    assert.equal(result.route.entity_mention,'ریاضی۲');
+  } finally {
+    if(oldKey===undefined) delete process.env.GAPGPT_API_KEY;else process.env.GAPGPT_API_KEY=oldKey;
+    if(oldModel===undefined) delete process.env.GAPGPT_MODEL;else process.env.GAPGPT_MODEL=oldModel;
+  }
+});
+
+
+test('model needs_clarification true cannot erase explicitly named unrecorded course',async()=>{
+  const state={pending_intent:INTENTS.READING};
+  let apiCalls=0;
+  const r=await resolveQuestion('برای ریاضی2',profile,{
+    ...routed(INTENTS.READING,{
+      subject:'courses',entity_id:null,entity_mention:'ریاضی ۲',needs_clarification:true
+    }),state,searchBooks:async()=>{apiCalls++;return []}
+  });
+  assert.equal(r.intent,INTENTS.READING);
+  assert.equal(r.capability,'ask_clarifying_question');
+  assert.match(r.answer,/ریاضی ۲/);
+  assert.match(r.answer,/فهرست عمومی.*نیست/);
+  assert.ok(r.fields_read.includes('courses[internet_of_things].title'));
+  assert.equal(r.next_state.pending_intent,INTENTS.READING);
+  assert.equal(apiCalls,0);
+});
+
+test('named registered reading followup overrides redundant model clarification',async()=>{
+  const r=await resolveQuestion('internet of things',profile,{
+    ...routed(INTENTS.READING,{
+      subject:'courses',entity_id:'internet_of_things',needs_clarification:true
+    }),state:{pending_intent:INTENTS.READING},
+    searchBooks:async()=>[{title:'Verified API Test Book'}]
+  });
+  assert.equal(r.capability,'answer_from_external_api');
+  assert.match(r.answer,/Verified API Test Book/);
+});
+
+test('unlisted course is handled without a pending clarification if user asks for books',async()=>{
+  const r=await resolveQuestion('برای ریاضی2 کتاب معرفی کن',profile,
+    routed(INTENTS.READING,{subject:'courses',entity_mention:'ریاضی۲',needs_clarification:true}));
+  assert.equal(r.intent,INTENTS.READING);
+  assert.match(r.answer,/ریاضی۲/);
+  assert.match(r.answer,/فهرست عمومی.*نیست/);
+});
+
+test('model-invented course mention is ignored even with needs_clarification true',async()=>{
+  const r=await resolveQuestion('چه کتابی بخونم؟',profile,routed(INTENTS.READING,{
+    subject:'courses',entity_mention:'ریاضی2',needs_clarification:true
+  }));
+  assert.equal(r.capability,'ask_clarifying_question');
+  assert.doesNotMatch(r.answer,/ریاضی2/);
+});

@@ -1,6 +1,6 @@
 # تمرین ۱ — پروفایل شخصی AI-Native با Context-aware Intent Routing
 
-یک صفحه شخصی مبتنی بر `profile.json` برای پاسخ به سؤال درباره پروژه‌های ثبت‌شده، درس‌ها، مهارت‌ها، پیشنهاد مطالعه و تناسب شغلی. این نسخه برای **آزمایش محلی** آماده است؛ استقرار و عملکرد واقعی GapGPT با کلید شما باید جداگانه آزموده شود.
+یک صفحه شخصی مبتنی بر `profile.json` برای پاسخ به سؤال درباره پروژه‌های ثبت‌شده، درس‌ها، مهارت‌ها، پیشنهاد مطالعه و تناسب شغلی. نسخه عمومی پروژه روی هم‌روش در نشانی https://sobhan.darkube.ir مستقر شده و در تست‌های انجام‌شده، اتصال GapGPT و Open Library پاسخ موفق داده‌اند. هر تغییر جدید، از جمله اصلاحیه اعتبارسنجی Schema، باید جداگانه Commit و Deploy شود.
 
 ## ساختار و Context
 
@@ -11,11 +11,29 @@
 
 `server/llm.js` برای GapGPT یک خروجی JSON می‌خواهد: `intent`, `subject`, `entity_id`, `focus`, `needs_clarification`. مدل فقط پرسش را **طبقه‌بندی** می‌کند؛ پاسخ نهایی را `server/resolve.js` از اطلاعات منتشرشده می‌سازد. خروجی مدل در `server/context.js` اعتبارسنجی می‌شود و اجازه دسترسی به فیلد منتشرنشده یا انجام کار ممنوع ندارد. در صورت خطای مدل، Ruleهای حداقلی فقط مسیر جایگزین‌اند.
 
+## JSON Schema و اعتبارسنجی خودکار داده
+
+- `profile.schema.json`: قرارداد نوع داده‌ها و ساختار مشخص رکورد، با اعلان JSON Schema Draft 2020-12.
+- `profile.json`: رکورد تکمیل‌شده با چهار درس ثبت‌شده، یک پروژه مستند، مهارت‌های عمومی و سیاست انتشار.
+- `scripts/schema-validator.mjs`: اعتبارسنج **بدون وابستگی npm** برای کلیدواژه‌هایی که در Schema فعلی استفاده می‌شوند: `type`، `required`، `properties`، `additionalProperties`، `items`، `minLength`، `minItems`، `uniqueItems`. کلیدواژه ناشناخته با خطا متوقف می‌شود تا هیچ محدودیتی به‌صورت ناخواسته نادیده گرفته نشود.
+- `scripts/validate-profile.mjs`: رابط فرمان برای بررسی فایل رکورد در برابر قرارداد و نمایش مسیر دقیق خطاها.
+- `tests/schema.test.js`: آزمون رکورد صحیح و نمونه‌های خراب؛ `npm test` قبل از سایر تست‌ها اعتبارسنجی پروفایل را اجرا می‌کند.
+
+```powershell
+npm run validate:profile
+npm test
+```
+
+نتیجه مطلوب: `PASS: profile.json conforms ...` و موفقیت تمام تست‌ها. برای تست فایل دلخواه می‌توان از `node scripts/validate-profile.mjs PATH_TO_PROFILE PATH_TO_SCHEMA` استفاده کرد.
+
+**دامنه اعتبارسنجی:** این اعتبارسنج کوچک برای محدودیت‌های مورد استفاده در Schema فعلی نوشته شده و یک پیاده‌سازی عمومی از **تمام** قابلیت‌های JSON Schema Draft 2020-12 نیست. اگر در آینده قواعد پیشرفته‌تری مثل `oneOf`، `$ref`، `pattern` یا `format` اضافه شود، باید از یک اعتبارسنج استاندارد کامل مانند Ajv استفاده شود یا پشتیبانی و تست مناسب به کد اضافه گردد. برای آزمون فعلی هیچ بسته خارجی نیاز نیست.
+
 ## اجرای محلی در PowerShell
 
 نیازمندی: **Node.js 20+**؛ بسته npm خارجی لازم نیست. دستورها از ریشه پروژه:
 
 ```powershell
+npm run validate:profile
 npm test
 $env:GAPGPT_MODEL = 'gpt-4o-mini'
 $env:GAPGPT_BASE_URL = 'https://api.gapgpt.app/v1'
@@ -56,12 +74,12 @@ Trace اطلاعات زیر را جداگانه ثبت می‌کند:
 
 ## انتشار و تحویل
 
-`Dockerfile` در ریشه و پورت `3000` ثابت مانده است. بعد از پایان آزمایش‌های محلی، تغییرات را Commit و Push کنید، سپس از منبع Git روی Hamravesh / Darkube دیپلوی کنید. کلید را در **متغیرهای محیطی/Secret** هم‌روش قرار دهید. نسخه‌ای که فقط لوکال است تحویل قابل قبول تمرین نیست.
+آدرس عمومی فعلی: **https://sobhan.darkube.ir**. مخزن پروژه: **https://github.com/arshadis/AINativeCourse**. فایل `Dockerfile` و پورت `3000` تغییر نمی‌کنند. هر اصلاحیه را بعد از `npm run validate:profile` و `npm test`، Commit و Push کرده و نتیجه Build/Deploy را در Hamravesh / Darkube بررسی کنید. کلید GapGPT فقط در **متغیرهای محیطی/Secret** هم‌روش نگه داشته شود؛ هرگز در Git قرار نگیرد. وجود آدرس عمومی جایگزین آزمایش واقعی بعد از هر Deploy نیست.
 
 تست‌های عمومی بعد از استقرار:
 
 ```bash
-npm run check:live -- https://YOUR-DEPLOYED-ADDRESS
+npm run check:live -- https://sobhan.darkube.ir
 ```
 
 گزارش `submission/traces.md` را از URL **عمومی** تولید کنید، نه URL لوکال. برای تحویل، سه Trace جواب درست، امتناع و سؤال روشن‌سازی به همراه لینک عمومی و Schema لازم است.

@@ -53,6 +53,10 @@ export function normalizeRoute(value, profile) {
     intent:value.intent,
     subject,
     entity_id:entityId,
+    // A named-but-unrecorded entity is merely a quote from the visitor's message,
+    // never a new course/project fact. The resolver checks the quote against the input.
+    entity_mention:[INTENTS.READING,INTENTS.UNCLEAR].includes(value.intent) &&
+      typeof value.entity_mention==='string' ? value.entity_mention.trim().slice(0,100) : null,
     focus:allowedFocus.has(value.focus)?value.focus:'unspecified',
     needs_clarification:value.needs_clarification===true,
     // User-described job information, NEVER a verified external job standard.

@@ -1,3 +1,9 @@
 node_modules/
 .env
 .DS_Store
+
+# Local secrets and temporary test output
+a.txt
+.env.*
+*.pem
+local-traces/

@@ -1,11 +1,12 @@
 {
   "tested_url": "https://sobhan.darkube.ir",
-  "generated_at": "2026-10-30T15:48:53.261Z",
+  "generated_at": "2026-11-07T13:49:03.575Z",
   "traces": [
     {
       "case": "good_answer",
       "question": "پروژه هفته‌چین را خلاصه کن",
       "intent": "project_summary",
+      "intent_source": "rules",
       "fields_read": [
         "projects[haftehchin].title",
         "projects[haftehchin].summary",
@@ -15,12 +16,13 @@
       "external_fields": [],
       "external_status": null,
       "capability": "answer_from_record",
-      "answer": "هفته‌چین (HaftehChin): وب‌اپلیکیشن فارسی برنامه‌ریزی هفتگی و مدیریت زمان با جدول ۲۴ ساعته از شنبه تا جمعه؛ دارای فعالیت‌های قابل شخصی‌سازی، جابه‌جایی با Drag & Drop، ذخیره‌سازی خودکار و پشتیبان‌گیری JSON. برنامه به‌صورت محلی و بدون نیاز به اینترنت یا دیتابیس اجرا می‌شود.\nفناوری‌ها: HTML5، CSS3، JavaScript (Vanilla JS)، Python 3، JSON، HTTP Server"
+      "answer": "هفته‌چین (HaftehChin)\nوب‌اپلیکیشن فارسی برنامه‌ریزی هفتگی و مدیریت زمان با جدول ۲۴ ساعته از شنبه تا جمعه؛ دارای فعالیت‌های قابل شخصی‌سازی، جابه‌جایی با Drag & Drop، ذخیره‌سازی خودکار و پشتیبان‌گیری JSON. برنامه به‌صورت محلی و بدون نیاز به اینترنت یا دیتابیس اجرا می‌شود.\nHTML5، CSS3، JavaScript (Vanilla JS)، Python 3، JSON، HTTP Server"
     },
     {
       "case": "refusal",
       "question": "نمره درس هوش مصنوعی من چند بوده؟",
       "intent": "private_fact",
+      "intent_source": "rules",
       "fields_read": [],
       "external_service": null,
       "external_fields": [],
@@ -32,22 +34,25 @@
       "case": "clarification",
       "question": "چه کتابی بخونم؟",
       "intent": "reading_recommendation",
+      "intent_source": "rules",
       "fields_read": [
         "courses[ai_native_systems_design].title",
         "courses[internet_of_things].title",
         "courses[macroeconomics].title",
-        "courses[world_economic_history].title"
+        "courses[world_economic_history].title",
+        "projects[haftehchin].title"
       ],
       "external_service": null,
       "external_fields": [],
       "external_status": null,
       "capability": "ask_clarifying_question",
-      "answer": "برای کدام درس منابع مطالعه می‌خواهید؟ AI-Native Systems Design، اینترنت اشیا (Internet of Things)، اقتصاد کلان (ماکرو)، تاریخ اقتصادی جهان"
+      "answer": "برای کدام درس یا پروژه منابع مطالعه می‌خواهید؟ AI-Native Systems Design، اینترنت اشیا (Internet of Things)، اقتصاد کلان (ماکرو)، تاریخ اقتصادی جهان، هفته‌چین (HaftehChin)"
     },
     {
       "case": "external_api",
       "question": "برای درس اینترنت اشیا کتاب پیشنهاد بده",
       "intent": "reading_recommendation",
+      "intent_source": "rules",
       "fields_read": [
         "courses[internet_of_things].title"
       ],
@@ -57,9 +62,9 @@
         "docs[].author_name",
         "docs[].key"
       ],
-      "external_status": null,
+      "external_status": "ok",
       "capability": "answer_from_external_api",
-      "answer": "برای درس «اینترنت اشیا (Internet of Things)»، این نتایج جستجوی کتاب در Open Library پیدا شدند (فهرست رسمی منابع درس نیستند):\n1. The internet of things — Samuel Greengard\n2. Internet of Things — Arshdeep Bahga، Vijay Madisetti\n3. Internet of things — Hakima Chaouchi"
+      "answer": "برای درس «اینترنت اشیا (Internet of Things)»، این کتاب‌ها در جستجوی Open Library پیدا شدند (لزوماً منابع رسمی درس یا پروژه نیستند):\n1. The internet of things — Samuel Greengard\n2. Internet of Things — Arshdeep Bahga، Vijay Madisetti\n3. Internet of things — Hakima Chaouchi"
     }
   ]
 }
