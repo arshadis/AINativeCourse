@@ -1,1 +1,141 @@
-<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>پروفایل هوشمند | تمرین AI-Native</title><link rel="stylesheet" href="/style.css"></head><body><main><header><span class="overline">AI-NATIVE · PERSONAL PROFILE</span><h1>پروفایل هوشمند</h1><p class="lede">درباره پروژه «هفته‌چین»، درس‌ها و مهارت‌های ثبت‌شده سؤال بپرسید. هر پاسخ با شواهد نشان داده می‌شود.</p></header><section class="summary"><div><span class="counter">۱</span> پروژه مستند</div><div><span class="counter">۴</span> درس ثبت‌شده</div><div class="small">منبع: profile.json</div></section><section class="panel"><h2>از این صفحه بپرسید</h2><div class="samples"><button type="button" data-q="پروژه هفته‌چین را خلاصه کن">خلاصه پروژه</button><button type="button" data-q="چه درس‌هایی در پروفایل ثبت شده‌اند؟">درس‌های ثبت‌شده</button><button type="button" data-q="What skills do you have?">مهارت‌ها</button><button type="button" data-q="برای درس اینترنت اشیا کتاب پیشنهاد بده">پیشنهاد مطالعه</button><button type="button" data-q="آیا برای شغل برنامه‌نویس JavaScript و Python مناسبم؟">تناسب شغلی</button><button type="button" data-q="نمره درسم چند شده؟">تست امتناع</button><button type="button" data-q="چه کتابی بخونم؟">سؤال مبهم</button></div><form id="ask"><label for="question">سؤال شما</label><textarea id="question" rows="3" maxlength="1000" placeholder="مثلاً پروژه هفته‌چین رو خلاصه کن ..." required></textarea><button class="primary" id="submit" type="submit">بررسی سؤال</button><button type="button" id="reset">شروع گفت‌وگوی جدید</button></form></section><section class="panel" id="result" hidden aria-live="polite"><h2>پاسخ</h2><p id="answer"></p><p id="followup-hint" hidden>پاسخ سؤال روشن‌سازی را همین‌جا وارد کنید؛ زمینه سؤال قبلی حفظ شده است.</p><div id="links"></div><details open><summary>چرا این پاسخ ارائه شد؟ (Trace)</summary><dl><dt>Intent</dt><dd id="intent"></dd><dt>Intent source</dt><dd id="intent-source"></dd><dt>Capability</dt><dd id="capability"></dd><dt>Fields read</dt><dd id="fields"></dd><dt>External service</dt><dd id="external"></dd><dt>API fields read</dt><dd id="external-fields"></dd><dt>Model status</dt><dd id="model-status"></dd><dt>Model HTTP status</dt><dd id="model-http"></dd><dt>GapGPT latency</dt><dd id="model-time"></dd><dt>External API latency</dt><dd id="external-time"></dd><dt>Total server latency</dt><dd id="total-time"></dd></dl></details></section><footer>محدودیت‌ها: این صفحه اطلاعات منتشرنشده را حدس نمی‌زند؛ ایمیل نمی‌فرستد، جلسه رزرو نمی‌کند و از طرف دانشگاه صحبت نمی‌کند.</footer></main><script src="/app.js" defer></script></body></html>
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#131c3d">
+  <meta name="description" content="پروفایل شخصی AI-Native؛ پاسخ مستند درباره پروژه‌ها، درس‌ها و مهارت‌ها با ردیابی شواهد و منابع.">
+  <title>پروفایل هوشمند | دستیار شخصی AI-Native</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header" aria-label="ناوبری اصلی">
+      <a class="brand" href="#top" aria-label="پروفایل هوشمند، بازگشت به بالای صفحه">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+        <span class="brand-name">پروفایل<span class="brand-highlight">هوشمند</span></span>
+        <span class="brand-caption" lang="en">AI-NATIVE</span>
+      </a>
+      <nav class="header-nav" aria-label="بخش‌های صفحه">
+        <a href="#ask-section">گفت‌وگو</a>
+        <a href="#how-it-works">نحوه عملکرد</a>
+      </nav>
+      <span class="header-chip"><span class="live-dot" aria-hidden="true"></span> پاسخ‌های قابل ردیابی</span>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-glow glow-one" aria-hidden="true"></div>
+        <div class="hero-glow glow-two" aria-hidden="true"></div>
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> AI-NATIVE PERSONAL PORTFOLIO</p>
+          <h1 id="hero-title">سؤال بپرسید، <span>پاسخ مستند</span> بگیرید.</h1>
+          <p class="hero-description">درباره پروژه «هفته‌چین»، درس‌ها و مهارت‌های ثبت‌شده سؤال کنید. اینجا هر پاسخ از اطلاعات مجاز یا یک منبع واقعی می‌آید و مسیر رسیدن به آن روشن است.</p>
+          <div class="hero-actions">
+            <a class="hero-cta" href="#ask-section">شروع پرسش و پاسخ <span aria-hidden="true">↙</span></a>
+            <span class="hero-note"><span class="tiny-shield" aria-hidden="true">✓</span> بدون حدس درباره اطلاعات شخصی</span>
+          </div>
+        </div>
+        <div class="process-card" id="how-it-works" aria-labelledby="process-title">
+          <div class="process-topline"><span class="process-glyph" aria-hidden="true">✦</span><span>HOW IT WORKS</span></div>
+          <h2 id="process-title">از سؤال تا شواهد</h2>
+          <ol class="process-list">
+            <li><span class="process-number">01</span><span><strong>درک سؤال</strong><small>تشخیص موضوع با GapGPT، در صورت اتصال</small></span></li>
+            <li><span class="process-number">02</span><span><strong>بررسی منبع</strong><small>اطلاعات مجاز پروفایل یا Open Library</small></span></li>
+            <li><span class="process-number">03</span><span><strong>پاسخ شفاف</strong><small>نمایش نتیجه همراه با Trace</small></span></li>
+          </ol>
+          <div class="process-footer"><span class="pulsing-dot" aria-hidden="true"></span> Human-readable &amp; evidence-based</div>
+        </div>
+      </section>
+
+      <section class="metrics" aria-label="نگاهی به پروفایل">
+        <div class="metric"><span class="metric-icon icon-indigo" aria-hidden="true">◈</span><div><strong class="metric-value">۱</strong><span class="metric-label">پروژه مستند</span></div></div>
+        <div class="metric"><span class="metric-icon icon-teal" aria-hidden="true">▤</span><div><strong class="metric-value">۴</strong><span class="metric-label">درس ثبت‌شده</span></div></div>
+        <div class="metric"><span class="metric-icon icon-amber" aria-hidden="true">⌘</span><div><strong class="metric-value metric-sources">۲</strong><span class="metric-label">یکپارچه‌سازی API</span></div></div>
+      </section>
+
+      <div class="section-heading" id="ask-section">
+        <div><p class="section-kicker">YOUR QUESTIONS</p><h2>دستیار پروفایل شما</h2><p>یک سؤال بنویسید یا از نمونه‌های آماده شروع کنید.</p></div>
+        <span class="section-tag">پرسش‌های فارسی و انگلیسی</span>
+      </div>
+
+      <div class="interaction-grid">
+        <section class="panel composer" aria-labelledby="composer-title">
+          <div class="panel-heading"><span class="heading-icon" aria-hidden="true">✎</span><div><h3 id="composer-title">چه چیزی می‌خواهید بدانید؟</h3><p>پاسخ‌ها تنها بر اساس اطلاعات ثبت‌شده و منابع مجاز هستند.</p></div></div>
+          <form id="ask">
+            <label class="input-label" for="question">سؤال شما</label>
+            <div class="textarea-wrap">
+              <textarea id="question" name="question" rows="5" maxlength="1000" placeholder="مثلاً: هفته‌چین با چه فناوری‌هایی ساخته شده؟" required aria-describedby="input-helper"></textarea>
+              <div class="input-foot"><span id="input-helper">برای ارسال سریع، Ctrl + Enter بزنید.</span><span id="char-count" aria-live="off">۰ / ۱۰۰۰</span></div>
+            </div>
+            <div class="composer-actions">
+              <button class="primary" id="submit" type="submit"><span class="send-icon" aria-hidden="true">✦</span><span class="button-label">بررسی سؤال</span><span class="btn-arrow" aria-hidden="true">←</span></button>
+              <button class="secondary" type="button" id="reset">شروع گفت‌وگوی جدید</button>
+            </div>
+            <div id="request-status" role="status" aria-live="polite" class="request-status" hidden></div>
+          </form>
+        </section>
+
+        <aside class="panel inspiration" aria-labelledby="examples-title">
+          <div class="panel-heading examples-header"><span class="heading-icon is-teal" aria-hidden="true">✧</span><div><h3 id="examples-title">از اینجا شروع کنید</h3><p>با یک کلیک، سؤال به کادر منتقل می‌شود.</p></div></div>
+          <div class="samples">
+            <button type="button" data-q="پروژه هفته‌چین را خلاصه کن"><span class="sample-icon" aria-hidden="true">◈</span><span>خلاصه پروژه</span><span class="sample-arrow" aria-hidden="true">↗</span></button>
+            <button type="button" data-q="چه درس‌هایی در پروفایل ثبت شده‌اند؟"><span class="sample-icon" aria-hidden="true">▤</span><span>درس‌های ثبت‌شده</span><span class="sample-arrow" aria-hidden="true">↗</span></button>
+            <button type="button" data-q="What skills do you have?"><span class="sample-icon" aria-hidden="true">✳</span><span>مهارت‌ها</span><span class="sample-arrow" aria-hidden="true">↗</span></button>
+            <button type="button" data-q="برای درس اینترنت اشیا کتاب پیشنهاد بده"><span class="sample-icon" aria-hidden="true">▣</span><span>پیشنهاد مطالعه</span><span class="sample-arrow" aria-hidden="true">↗</span></button>
+            <button type="button" data-q="آیا برای شغل برنامه‌نویس JavaScript و Python مناسبم؟"><span class="sample-icon" aria-hidden="true">⌘</span><span>تناسب شغلی</span><span class="sample-arrow" aria-hidden="true">↗</span></button>
+            <button type="button" data-q="نمره درسم چند شده؟"><span class="sample-icon" aria-hidden="true">◇</span><span>تست امتناع</span><span class="sample-arrow" aria-hidden="true">↗</span></button>
+            <button type="button" data-q="چه کتابی بخونم؟"><span class="sample-icon" aria-hidden="true">؟</span><span>سؤال مبهم</span><span class="sample-arrow" aria-hidden="true">↗</span></button>
+          </div>
+          <div class="samples-foot"><span class="safe-spark" aria-hidden="true">✦</span><span>اگر سؤال مبهم باشد، دستیار یک سؤال روشن‌کننده می‌پرسد.</span></div>
+        </aside>
+      </div>
+
+      <section class="panel result-panel" id="result" hidden aria-live="polite" aria-labelledby="result-title">
+        <div class="result-heading">
+          <div class="result-title-wrap"><span class="result-mark" aria-hidden="true">✦</span><div><p class="section-kicker">EVIDENCE-BASED ANSWER</p><h2 id="result-title">پاسخ دستیار</h2></div></div>
+          <div class="result-tools"><span class="result-pill" id="result-tag">پاسخ مستند</span><button id="copy-answer" type="button" class="copy-button" title="کپی پاسخ" aria-label="کپی متن پاسخ"><span aria-hidden="true">⧉</span> کپی پاسخ</button></div>
+        </div>
+        <div class="answer-surface"><p id="answer"></p></div>
+        <p id="followup-hint" class="followup-hint" hidden><span aria-hidden="true">↳</span> پاسخ سؤال روشن‌سازی را در کادر بالا وارد کنید؛ زمینه سؤال قبلی حفظ شده است.</p>
+        <div id="links" class="book-links" aria-label="لینک منابع خارجی"></div>
+        <section id="next-questions" class="next-questions" hidden aria-labelledby="next-questions-title">
+          <div class="next-questions-heading"><span class="next-questions-mark" aria-hidden="true">✧</span><div><h3 id="next-questions-title">یک قدم جلوتر</h3><p id="next-questions-description">سؤال‌های مرتبط با همین پاسخ، برگرفته از اطلاعات مجاز پروفایل</p></div></div>
+          <div id="next-questions-list" class="next-questions-list"></div>
+        </section>
+        <details class="trace-panel" open>
+          <summary><span class="trace-summary-icon" aria-hidden="true">⌁</span><span class="trace-title">چرا این پاسخ ارائه شد؟</span><span class="trace-subtitle">Trace &amp; evidence</span><span class="trace-chevron" aria-hidden="true">⌄</span></summary>
+          <div class="evidence-flow" aria-label="مراحل تولید پاسخ">
+            <div class="flow-step"><span class="flow-number">۱</span><div><strong>تشخیص درخواست</strong><span id="flow-intent">—</span></div></div>
+            <span class="flow-link" aria-hidden="true">←</span>
+            <div class="flow-step"><span class="flow-number">۲</span><div><strong>منبع و شواهد</strong><span id="flow-source">—</span></div></div>
+            <span class="flow-link" aria-hidden="true">←</span>
+            <div class="flow-step"><span class="flow-number">۳</span><div><strong>اقدام مجاز</strong><span id="flow-action">—</span></div></div>
+          </div>
+          <dl class="trace-grid">
+            <div class="trace-item"><dt>Intent</dt><dd id="intent">—</dd></div>
+            <div class="trace-item"><dt>Intent source</dt><dd id="intent-source">—</dd></div>
+            <div class="trace-item"><dt>Capability</dt><dd id="capability">—</dd></div>
+            <div class="trace-item trace-wide"><dt>Fields read</dt><dd id="fields">—</dd></div>
+            <div class="trace-item"><dt>External service</dt><dd id="external">—</dd></div>
+            <div class="trace-item"><dt>API fields read</dt><dd id="external-fields">—</dd></div>
+            <div class="trace-item"><dt>Model status</dt><dd id="model-status">—</dd></div>
+            <div class="trace-item"><dt>Model HTTP status</dt><dd id="model-http">—</dd></div>
+            <div class="trace-item"><dt>GapGPT latency</dt><dd id="model-time">—</dd></div>
+            <div class="trace-item"><dt>External API latency</dt><dd id="external-time">—</dd></div>
+            <div class="trace-item"><dt>Total server latency</dt><dd id="total-time">—</dd></div>
+          </dl>
+        </details>
+      </section>
+
+      <section class="trust-strip" aria-labelledby="trust-title">
+        <span class="trust-icon" aria-hidden="true">✓</span>
+        <div><h2 id="trust-title">شفافیت، قبل از هر چیز</h2><p>این صفحه اطلاعات منتشرنشده را حدس نمی‌زند، ایمیل نمی‌فرستد، جلسه رزرو نمی‌کند و از طرف دانشگاه صحبت نمی‌کند.</p></div>
+        <span class="trust-stamp">PUBLIC RECORD ONLY</span>
+      </section>
+    </main>
+    <footer class="site-footer"><span>طراحی شده برای تمرین AI-Native Systems Design</span><span>منبع اطلاعات: <code>profile.json</code> · پیشنهاد مطالعه: Open Library</span></footer>
+  </div>
+</body>
+</html>

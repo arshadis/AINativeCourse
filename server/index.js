@@ -3,6 +3,7 @@ import {readFile} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import {dirname, resolve, extname} from 'node:path';
 import {resolveQuestion} from './resolve.js';
+import {suggestNextQuestions} from './suggestions.js';
 const root=resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const profile=JSON.parse(await readFile(resolve(root,'profile.json'),'utf8'));
 const staticRoot=resolve(root,'public');
@@ -28,6 +29,7 @@ const server=http.createServer(async(req,res)=>{
         useModel:!!(process.env.GAPGPT_API_KEY && process.env.GAPGPT_MODEL),
       });
       result.total_latency_ms=Math.round(performance.now()-started);
+      result.suggested_questions=suggestNextQuestions(profile,result);
       res.writeHead(200,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});
       return res.end(JSON.stringify(result));
     }
